@@ -1,0 +1,11 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imtha2UiLCJpZCI6IjVlY2Q3MGYwOWU5ZDAwMzVmY2Q2MDZlZCIsImlhdCI6MTU5MDYxODMzM30.hVHMZxl_YZ9BQAgXUGCiDJkEqVaUQcIbCRedvW_DWIg
+
+{
+  "title": "Third class is even cheaper", 
+  "author": "Kake Kekäläinen", 
+  "url": "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.html", 
+  "likes": 999, 
+  "userId": "5ecd70f09e9d0035fcd606ed"
+}
