@@ -11,7 +11,6 @@ const App = () => {
       <Notification />
       <AnecdoteList />
       <AnecdoteForm />
-      
     </div>
   )
 }
