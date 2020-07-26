@@ -15,7 +15,6 @@ const App = () => {
   }, [dispatch])
 
 
-  
   return (
     <div>
       <h2>Anecdotes</h2>
