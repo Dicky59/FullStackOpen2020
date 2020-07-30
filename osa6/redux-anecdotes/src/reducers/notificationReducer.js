@@ -1,8 +1,7 @@
 const notificationReducer = (state = null, action) => {
   switch (action.type) {
     case 'SET_NOTIFICATION':
-      const message = action.data.message
-      return state = message
+      return action.content
     case 'CLEAR_NOTIFICATION':
       return state = null
     default:
@@ -10,14 +9,27 @@ const notificationReducer = (state = null, action) => {
   }
 }
 
+let breakPoint
 
-
-export const setNotification = (content) => {
-  return {
+export const setNotification = (content, time) => {
+  return async dispatch => {
+    dispatch({
       type: 'SET_NOTIFICATION',
-      data: {message:content }   
+      content
+    })
+
+    if (breakPoint) {
+      clearTimeout(breakPoint)
+    }
+
+    breakPoint = setTimeout(() => {
+      dispatch({
+        type: 'CLEAR_NOTIFICATION'
+      })
+    }, time * 1000)
   }
 }
+
 
 export const clearNotification = () => {
   return {

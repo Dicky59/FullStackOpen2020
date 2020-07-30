@@ -11,10 +11,7 @@ const addAnecdote = async(event) => {
   const content = event.target.anecdote.value
   event.target.anecdote.value = '' 
     dispatch(createAnecdote(content))
-    dispatch(setNotification(`New anecdote '${content}'`))
-    setTimeout(() => {
-      dispatch(clearNotification())
-    }, 5000)
+    dispatch(setNotification(`New anecdote '${content}'`, 5))
 }
 
 return (
