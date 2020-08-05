@@ -9,7 +9,7 @@ const notificationReducer = (state = null, action) => {
   }
 }
 
-let breakPoint
+var timeoutID
 
 export const setNotification = (content, time) => {
   return async dispatch => {
@@ -18,11 +18,11 @@ export const setNotification = (content, time) => {
       content
     })
 
-    if (breakPoint) {
-      clearTimeout(breakPoint)
+    if (timeoutID) {
+      clearTimeout(timeoutID)
     }
 
-    breakPoint = setTimeout(() => {
+    timeoutID = setTimeout(() => {
       dispatch({
         type: 'CLEAR_NOTIFICATION'
       })
