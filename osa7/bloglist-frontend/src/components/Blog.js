@@ -41,7 +41,7 @@ Blog.propTypes = {
   }).isRequired,
   handleLike: PropTypes.func.isRequired,
   handleRemove: PropTypes.func.isRequired,
-  own: PropTypes.bool.isRequired
+ // own: PropTypes.bool.isRequired
 }
 
 export default Blog
