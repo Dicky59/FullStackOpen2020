@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { likeBlog, removeBlog } from '../reducers/blogReducer'
+import { likeBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import Blog from './Blog'
 import storage from '../utils/storage'
@@ -22,14 +22,6 @@ const BlogList = () => {
     dispatch(setNotification(`You voted '${blog.title}'`, 5))
   }
 
-  const handleRemove = async (id) => {
-    const blog = blogs.find(b => b.id === id)
-    const ok = window.confirm(`Remove blog ${blog.title} by ${blog.author}`)
-    if (ok) {
-      dispatch(removeBlog(blog.id))
-    }
-  }
-
   return (
     <div>
       <h2>Blogs</h2>
@@ -39,8 +31,6 @@ const BlogList = () => {
             key={blog.id}
             blog={blog}
             handleLike={handleLike}
-            handleRemove={handleRemove}
-            own={user.username===blog.user.username}
           />
         </div>
       )}
