@@ -4,18 +4,20 @@ import Togglable from './components/Togglable'
 import BlogList from './components/BlogList'
 import NewBlog from './components/NewBlog'
 import Users from './components/Users'
+import UserPage from './components/UserPage'
 import storage from './utils/storage'
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
 import LoginForm from './components/LoginForm'
 import { initializeUsers } from './reducers/userReducer'
 import { getUsers } from './reducers/usersReducer'
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route, useRouteMatch } from 'react-router-dom'
 
 const App = () => {
   const dispatch = useDispatch()
   const blogFormRef = React.createRef()
   const user = useSelector((state) => state.user)
+  const users = useSelector(state => state.users)
 
   useEffect(() => {
     dispatch(initializeBlogs())
@@ -29,6 +31,9 @@ const App = () => {
       type: 'LOGOUT',
     })
   }
+
+  const match = useRouteMatch('/user/:id')
+  const userView = match ? users.find(user => user.id === match.params.id) : null
 
   if (!user) {
     return <LoginForm />
@@ -46,6 +51,9 @@ const App = () => {
       </Togglable>
       <Router>
         <Switch>
+          <Route path="/users/:id" >
+            <UserPage user={userView} />
+          </Route>
           <Route path="/users">
             <Users />
           </Route>
