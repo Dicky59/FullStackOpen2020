@@ -1,42 +1,31 @@
-import React, { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { likeBlog } from '../reducers/blogReducer'
-import { setNotification } from '../reducers/notificationReducer'
-import Blog from './Blog'
-import storage from '../utils/storage'
+import React from 'react'
+import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 const BlogList = () => {
-  const blogs = useSelector((state) => state.blog).sort(
-    (a, b) => b.votes - a.votes
-  )
-  const dispatch = useDispatch()
-  const [user, setUser] = useState(null)
+  const blogs = useSelector(state => state.blog)
 
-  useEffect(() => {
-    const user = storage.loadUser()
-    setUser(user)
-  }, [])
-
-  const handleLike = async (id) => {
-    const blog = blogs.find((b) => b.id === id)
-    const likedBlog = { ...blog, likes: blog.likes, user: blog.user.id }
-    dispatch(likeBlog(likedBlog))
-    dispatch(setNotification(`You voted '${blog.title}'`, 5))
+  const blogStyle = {
+    paddingTop: 10,
+    paddingLeft: 2,
+    border: 'solid',
+    borderWidth: 1,
+    marginBottom: 5
   }
 
   return (
     <div>
-      {blogs.map((blog) => (
-        <div key={blog.id}>
-          <Blog
-            key={blog.id}
-            title={blog.title}
-            blog={blog}
-            handleLike={handleLike}
-            user={user}
-          />
-        </div>
-      ))}
+      {blogs.map(blog => {
+        return (
+          <div key={blog.id} className='blog' style={blogStyle}>
+            <div>
+              <Link to={`/blogs/${blog.id}`}>
+                {blog.title}
+              </Link>
+            </div>
+          </div>
+        )
+      })}
     </div>
   )
 }

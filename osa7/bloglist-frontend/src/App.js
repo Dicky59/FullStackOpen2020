@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import BlogList from './components/BlogList'
+import Blog from './components/Blog'
 import NewBlog from './components/NewBlog'
 import Users from './components/Users'
 import UserPage from './components/UserPage'
@@ -18,6 +19,7 @@ const App = () => {
   const blogFormRef = React.createRef()
   const user = useSelector((state) => state.user)
   const users = useSelector(state => state.users)
+  const blogs = useSelector(state => state.blog)
 
   useEffect(() => {
     dispatch(initializeBlogs())
@@ -33,7 +35,14 @@ const App = () => {
   }
 
   const match = useRouteMatch('/user/:id')
-  const userView = match ? users.find(user => user.id === match.params.id) : null
+  const userView = match
+    ? users.find(user => user.id === match.params.id)
+    : null
+
+  const blogmatch = useRouteMatch('/blogs/:id')
+  const blog = blogmatch
+    ? blogs.find(blog => blog.id === blogmatch.params.id)
+    : null
 
   if (!user) {
     return <LoginForm />
@@ -51,6 +60,9 @@ const App = () => {
       </Togglable>
       <Router>
         <Switch>
+          <Route path='/blogs/:id'>
+            <Blog blog={blog} />
+          </Route>
           <Route path="/users/:id" >
             <UserPage user={userView} />
           </Route>
@@ -64,7 +76,6 @@ const App = () => {
             {LoginForm}
           </Route>
           <Route path="/blogs">
-            <h2>Blogs</h2>
           </Route>
         </Switch>
       </Router>
