@@ -12,7 +12,7 @@ import { initializeBlogs } from './reducers/blogReducer'
 import LoginForm from './components/LoginForm'
 import { initializeUsers } from './reducers/userReducer'
 import { getUsers } from './reducers/usersReducer'
-import { BrowserRouter as Router, Switch, Route, useRouteMatch } from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route, Link, useRouteMatch } from 'react-router-dom'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -50,15 +50,20 @@ const App = () => {
 
   return (
     <div>
-      <h1>Blogs</h1>
-      <Notification />
-      <p>
-        {user.name} logged in <button onClick={handleLogout}>logout</button>
-      </p>
-      <Togglable buttonLabel="Create new blog" ref={blogFormRef}>
-        <NewBlog />
-      </Togglable>
       <Router>
+        <div className='navigation'>
+          <Link to='/'>blogs</Link>
+          <Link to='/users'>users</Link>
+          <span>
+            {user.name} logged in
+          </span>
+          <button onClick={handleLogout}>logout</button>
+        </div>
+        <h1>Blogs</h1>
+        <Notification />
+        <Togglable buttonLabel="Create new blog" ref={blogFormRef}>
+          <NewBlog />
+        </Togglable>
         <Switch>
           <Route path='/blogs/:id'>
             <Blog blog={blog} />
