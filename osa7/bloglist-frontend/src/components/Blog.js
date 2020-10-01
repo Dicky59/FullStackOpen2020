@@ -2,9 +2,7 @@ import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { likeBlog } from '../reducers/blogReducer'
 import { useDispatch, useSelector } from 'react-redux'
-import { initComments } from '../reducers/commentReducer'
-//import Comment from './Comment'
-//import CommentForm from './CommentForm'
+import { initComments, postComment } from '../reducers/commentReducer'
 
 const Blog = () => {
   const comments = useSelector(state => state.comments)
@@ -13,6 +11,16 @@ const Blog = () => {
   const id = useParams().id
   const aBlog = blog.find(b => b.id === id)
   const blogComments = comments.filter(c => c.blog === id)
+
+  const addComment =(event)=> {
+    event.preventDefault()
+    const commentObject = {
+      comment: event.target.newComment.value,
+      blog: id
+    }
+    dispatch(postComment(commentObject))
+    event.target.newComment.value = ''
+  }
 
   useEffect(() => {
     dispatch(initComments(id))
@@ -35,10 +43,15 @@ const Blog = () => {
       <div>{aBlog.likes} likes<button onClick={() => handleLike()}>like</button></div>
       <div>added by {aBlog.user.name}</div>
       <br></br>
-      <h3>comments</h3>
+      <h3>Comments</h3>
+      <form onSubmit={addComment}>
+        <input name='newComment'></input>
+        <button type='submit'>Add comment</button>
+      </form>
+      <br></br>
+      {blogComments.map(comment => <li key={comment.id}>{comment.comment}</li>)}
       <div>
         <ul>
-          {blogComments.map(comment => <li key={comment.id}>{comment.comment}</li>)}
         </ul>
       </div>
     </div>
