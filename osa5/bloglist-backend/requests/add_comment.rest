@@ -1,0 +1,7 @@
+POST http://localhost:3001/api/blogs/5f5a842ecadd530b2c929685/comments
+content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRpY2t5IiwiaWQiOiI1ZWQ0MTRhZWNjMzkyNjM0MDg0M2YyODgiLCJpYXQiOjE2MDE0MTM5NzJ9.6K9F8mx2e4e7lxbwq4f0tDOTS3dlJrc_0e3PoRczfWQ
+
+{
+  "comment": "Mustaa makkaraa"
+}
