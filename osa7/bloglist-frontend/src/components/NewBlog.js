@@ -2,6 +2,7 @@ import React from 'react'
 import { createBlog } from '../reducers/blogReducer'
 import { useDispatch } from 'react-redux'
 import { setNotification } from '../reducers/notificationReducer'
+import { Button, Input, Title, Form, Label } from '../styledComponents'
 
 const NewBlog = () => {
   const dispatch = useDispatch()
@@ -22,22 +23,17 @@ const NewBlog = () => {
 
   return (
     <div>
-      <h2>Create new</h2>
-      <form onSubmit={addBlog}>
-        <div>
-          author
-          <input name='author'/>
-        </div>
-        <div>
-          title
-          <input name='title' />
-        </div>
-        <div>
-          url
-          <input name='url' />
-        </div>
-        <button>create</button>
-      </form>
+      <Title>Create new</Title>
+      <Form onSubmit={addBlog}>
+        <Label>author</Label>
+        <Input name='author'/>
+        <Label>title</Label>
+        <Input name='title' />
+        <Label>url</Label>
+        <Input name='url' />
+        <br></br>
+        <Button>create</Button>
+      </Form>
     </div>
   )
 }

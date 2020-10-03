@@ -12,7 +12,8 @@ import { initializeBlogs } from './reducers/blogReducer'
 import LoginForm from './components/LoginForm'
 import { initializeUsers } from './reducers/userReducer'
 import { getUsers } from './reducers/usersReducer'
-import { BrowserRouter as Router, Switch, Route, Link, useRouteMatch } from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route, useRouteMatch } from 'react-router-dom'
+import { Button, Title, Page, Footer, Navigation, NavLink, Text } from './styledComponents'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -49,17 +50,15 @@ const App = () => {
   }
 
   return (
-    <div>
+    <Page>
       <Router>
-        <div className='navigation'>
-          <Link to='/'>blogs</Link>
-          <Link to='/users'>users</Link>
-          <span>
-            {user.name} logged in
-          </span>
-          <button onClick={handleLogout}>logout</button>
-        </div>
-        <h1>Blogs</h1>
+        <Navigation>
+          <NavLink to='/'>blogs</NavLink>
+          <NavLink to='/users'>users</NavLink>
+          <Text>{user.name} logged in </Text>
+          <Button onClick={handleLogout}>logout</Button>
+        </Navigation>
+        <Title>Blogs</Title>
         <Notification />
         <Togglable buttonLabel="Create new blog" ref={blogFormRef}>
           <NewBlog />
@@ -83,8 +82,11 @@ const App = () => {
           <Route path="/blogs">
           </Route>
         </Switch>
+        <Footer>
+          <em>Blog app, Department of Computer Science 2020</em>
+        </Footer>
       </Router>
-    </div>
+    </Page>
   )
 }
 

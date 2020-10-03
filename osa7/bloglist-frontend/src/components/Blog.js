@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { likeBlog } from '../reducers/blogReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { initComments, postComment } from '../reducers/commentReducer'
+import { Button, Title, Text, Input, StyledA } from '../styledComponents'
 
 const Blog = () => {
   const comments = useSelector(state => state.comments)
@@ -37,23 +38,19 @@ const Blog = () => {
   }
   return (
     <div>
-      <h1>{aBlog.title}</h1>
-      <a href={`${aBlog.url}`}>{aBlog.url}</a>
+      <Title>{aBlog.title}</Title>
+      <StyledA href={`${aBlog.url}`}>{aBlog.url}</StyledA>
       <br></br>
-      <div>{aBlog.likes} likes<button onClick={() => handleLike()}>like</button></div>
-      <div>added by {aBlog.user.name}</div>
+      <div>{aBlog.likes} likes<Button onClick={() => handleLike()}>like</Button></div>
+      <Text>added by {aBlog.user.name}</Text>
       <br></br>
-      <h3>Comments</h3>
+      <Title>comments</Title>
       <form onSubmit={addComment}>
-        <input name='newComment'></input>
-        <button type='submit'>Add comment</button>
+        <Input name='newComment'></Input>
+        <Button type='submit'>Add comment</Button>
       </form>
       <br></br>
-      {blogComments.map(comment => <li key={comment.id}>{comment.comment}</li>)}
-      <div>
-        <ul>
-        </ul>
-      </div>
+      <Text>{blogComments.map(comment => <li key={comment.id}>{comment.comment}</li>)}</Text>
     </div>
   )
 }

@@ -3,6 +3,7 @@ import { userLogin } from '../reducers/userReducer'
 import storage from '../utils/storage'
 import { useDispatch } from 'react-redux'
 import Notification from './Notification'
+import { Button, Title, Page, Footer, Input, Form, Label } from '../styledComponents'
 
 const LoginForm = () => {
   const dispatch = useDispatch()
@@ -30,35 +31,40 @@ const LoginForm = () => {
 
   if ( !user ) {
     return (
-      <div>
-        <h2>login to application</h2>
-        <Notification />
-        <form onSubmit={handleLogin}>
-          <div>
-            username
-            <input
-              id='username'
-              value={username}
-              onChange={({ target }) => setUsername(target.value)}
-            />
-          </div>
-          <div>
-            password
-            <input
-              id='password'
-              value={password}
-              onChange={({ target }) => setPassword(target.value)}
-            />
-          </div>
-          <button id='login'>login</button>
-        </form>
-      </div>
+      <Page>
+        <div>
+          <Title>Login</Title>
+          <Notification />
+          <Form onSubmit={handleLogin}>
+            <div>
+              <Label>username</Label>
+              <Input
+                id='username'
+                value={username}
+                onChange={({ target }) => setUsername(target.value)}
+              />
+            </div>
+            <div>
+              <Label>password</Label>
+              <Input
+                id='password'
+                value={password}
+                onChange={({ target }) => setPassword(target.value)}
+              />
+            </div>
+            <Button type="submit" primary=''>login</Button>
+          </Form>
+        </div>
+      </Page>
     )
   }
 
   return (
     <div>
       <Notification />
+      <Footer>
+        <em>Note app, Department of Computer Science 2020</em>
+      </Footer>
     </div>
   )
 }

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { initializeUsers } from '../reducers/userReducer'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Title, NavLink, Text} from '../styledComponents'
 
 const Users = () => {
   const users = useSelector(state => state.users)
@@ -13,19 +13,19 @@ const Users = () => {
 
   return (
     <div>
-      <h2>Users</h2>
+      <Title>Users</Title>
       <table>
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Blogs created</th>
+            <th><Text>Name</Text></th>
+            <th><Text>Blogs created</Text></th>
           </tr>
         </thead>
         <tbody>
           {users && users.map(user => {
             return <tr key={user.name}>
               <td>
-                <Link to={'users/' + user.id}>{user.name}</Link>
+                <NavLink to={'users/' + user.id}>{user.name}</NavLink>
               </td>
               <td>{user.blogs.length}</td>
             </tr>}
