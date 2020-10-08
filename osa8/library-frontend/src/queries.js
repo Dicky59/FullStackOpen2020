@@ -7,15 +7,17 @@ export const ALL_AUTHORS = gql`
       born
       bookCount
       id
+      genre
     }
   }
 `
 export const ALL_BOOKS = gql`
   query {
-    allBooks  {
+    allBooks {
       title
       author
       published
+      id
     }
   }
-` 
+`
