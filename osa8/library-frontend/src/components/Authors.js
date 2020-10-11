@@ -1,6 +1,7 @@
 import React from 'react'
 import { useQuery } from '@apollo/client'
 import { ALL_AUTHORS } from '../queries'
+import SetBirth from './SetBirth'
 
 const Authors = (props) => {
   const result = useQuery(ALL_AUTHORS)
@@ -17,7 +18,7 @@ const Authors = (props) => {
 
   return (
     <div>
-      <h2>authors</h2>
+      <h2>Authors</h2>
       <table>
         <tbody>
           <tr>
@@ -38,7 +39,7 @@ const Authors = (props) => {
           )}
         </tbody>
       </table>
-
+      <SetBirth />
     </div>
   )
 }
