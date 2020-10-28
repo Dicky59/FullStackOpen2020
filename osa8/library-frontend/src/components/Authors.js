@@ -5,6 +5,7 @@ import SetBirth from './SetBirth'
 
 const Authors = (props) => {
   const result = useQuery(ALL_AUTHORS)
+  console.log('RESULT', result)
 
   if (!props.show) {
     return null

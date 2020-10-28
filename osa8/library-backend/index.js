@@ -6,13 +6,13 @@ const Author = require('./models/author')
 const User = require('./models/user')
 const jwt = require('jsonwebtoken')
 
-const JWT_SECRET = config.JWT_SECRET
+const JWT_SECRET = 'Freda14A9'
 
 mongoose.set('useFindAndModify', false)
 
 mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
-        .then(() => console.log('connected to MongoDB'))
-        .catch((error) => { console.log('error connection to MongoDB:', error.message) })
+  .then(() => console.log('connected to MongoDB'))
+  .catch((error) => { console.log('error connection to MongoDB:', error.message) })
 
 const typeDefs = gql`
 type User {
@@ -99,10 +99,10 @@ const resolvers = {
           invalidArgs: args,
         })
       }
-  },
-  editAuthor: async (root, args, context) => {
-    if (!context.currentUser)
-      throw new AuthenticationError('Invalid credentials')
+    },
+    editAuthor: async (root, args, context) => {
+      if (!context.currentUser)
+        throw new AuthenticationError('Invalid credentials')
       let author = await Author.findOne({ name: args.name })
       if (!author) {
         return null
@@ -113,7 +113,7 @@ const resolvers = {
     },
     createUser: async (root, args) => {
       const user = new User({ username: args.username })
-  
+
       try {
         return user.save()
       } catch (error) {
@@ -124,19 +124,19 @@ const resolvers = {
     },
     login: async (root, args) => {
       const user = await User.findOne({ username: args.username })
-  
-      if ( !user || args.password !== 'pw123' ) {
+
+      if ( !user || args.password !== 'secret' ) {
         throw new UserInputError("wrong credentials")
       }
-  
+
       const userForToken = {
         username: user.username,
         id: user._id,
       }
-  
+
       return { value: jwt.sign(userForToken, JWT_SECRET) }
     },
-    
+
   }
 }
 
