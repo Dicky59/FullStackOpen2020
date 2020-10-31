@@ -11,7 +11,7 @@ const Books = (props) => {
   useEffect(() => {
     if(result.data){
       setBookData(result.data.allBooks)
-      const genresArray = result.data.allBooks.flatMap(b => b.genres)
+      const genresArray = result.data.allBooks.flatMap(book => book.genres)
       setGenres([...new Set(genresArray), "All genres"])
     }
   }, [result])

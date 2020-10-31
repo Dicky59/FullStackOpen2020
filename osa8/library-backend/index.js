@@ -22,6 +22,7 @@ type User {
 }
 type Token {
   value: String!
+  favoriteGenre: String!
 }
 type Book {
   title: String!
@@ -112,15 +113,16 @@ const resolvers = {
       return author
     },
     createUser: async (root, args) => {
-      const user = new User({ username: args.username })
-
+      const user = new User({
+        username: args.username,
+        favoriteGenre: args.favoriteGenre,
+      })
       try {
-        return user.save()
+        await user.save()
       } catch (error) {
-        throw new UserInputError(error.message, {
-          invalidArgs: args,
-        })
+        throw new UserInputError(error.message, { invalidArgs: args })
       }
+      return user
     },
     login: async (root, args) => {
       const user = await User.findOne({ username: args.username })
@@ -134,7 +136,9 @@ const resolvers = {
         id: user._id,
       }
 
-      return { value: jwt.sign(userForToken, JWT_SECRET) }
+      return { value: jwt.sign(userForToken, JWT_SECRET),
+        favoriteGenre: user.favoriteGenre
+      }
     },
 
   }
