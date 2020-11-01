@@ -45,7 +45,7 @@ const FavoriteBooks = (props) => {
             </th>
           </tr>
           {books.map(book => (book.genres.includes(favoriteGenre)) && (
-            <tr key={book.id}>
+            <tr key={book.title}>
               <td>{book.title}</td>
               <td>{book.author.name}</td>
               <td>{book.published}</td>
