@@ -6,18 +6,8 @@ import LoginForm from './components/LoginForm'
 import FavoriteBooks from './components/FavoriteBooks'
 import { useApolloClient } from '@apollo/client'
 
-const Notify = ({ errorMessage }) => {
-  if (!errorMessage) return null
-  return (
-    <div style={{ color: 'red' }}>
-      {errorMessage}
-    </div>
-  )
-}
-
 const App = () => {
   const [page, setPage] = useState('authors')
-  const [errorMessage, setErrorMessage] = useState(null)
   const [token, setToken] = useState(null)
   const client = useApolloClient()
 
@@ -36,7 +26,6 @@ const App = () => {
 
   return (
     <div>
-      <Notify errorMessage={errorMessage} />
       <div>
         <button onClick={() => setPage("authors")}>authors</button>
 				<button onClick={() => setPage("books")}>books</button>
@@ -52,7 +41,7 @@ const App = () => {
 			<Books show={page === "books"} />
 			<NewBook show={page === "add"} />
 			<LoginForm setToken={setToken} show={page === "login"} />
-      <FavoriteBooks show={page === 'favoritebooks'} />
+      <FavoriteBooks show={page === 'favoritebooks'} token={token} />
 		</div>
   )
 }

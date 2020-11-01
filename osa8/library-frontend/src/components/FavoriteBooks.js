@@ -1,63 +1,56 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { ALL_BOOKS, ME } from '../queries'
-import { useQuery } from '@apollo/client'
+import { useLazyQuery } from '@apollo/client'
 
 const FavoriteBooks = (props) => {
-  const [books, setBooks] = useState([])
-  const [genreFilter, setGenreFilter] = useState(null)
-  const result = useQuery(ALL_BOOKS)
-  const user = useQuery(ME)
+  const [getBooks, result] = useLazyQuery(ALL_BOOKS)
+  const [getMe, meResult] = useLazyQuery(ME, {
+    onCompleted: (data) => {
+      getBooks({
+        variables: {genre: data.me.favoriteGenre}
+      })
+    }
+  })
 
   useEffect(() => {
-    if (result.data) {
-      const allBooks = result.data.allBooks
-      setBooks(allBooks)
+    if (props.token) {
+      getMe()
     }
-  }, [result.data])
+  }, [getMe, props.token])
 
-  useEffect(() => {
-    if (user.data && user.data.me) {
-      setGenreFilter(user.data.me.favoriteGenre)
-    }
-  }, [user])
-
-  const filteredBooks = () => {
-    const filtered = genreFilter
-      ? books.filter(book => book.genres.includes(genreFilter))
-      : books
-    return filtered
-  }
-
-  if (!props.show) {
+  if (!props.show || !props.token) {
     return null
   }
 
-  if (result.loading) {
-    return <div>loading...</div>
+  if (result.loading || meResult.loading)  {
+    return <div>Loading...</div>
   }
+  
+  const books = result.data.allBooks
+  const favoriteGenre = meResult.data.me.favoriteGenre
 
   return (
     <div>
       <h2>Recommendations</h2>
-      <div>Books in your favorite genre <strong>{genreFilter}</strong></div>
+      <div>Books in your favorite genre <strong>{favoriteGenre}</strong></div>
       <table>
         <tbody>
           <tr>
             <th></th>
             <th>
-              author
+              Author
             </th>
             <th>
-              published
+              Published
             </th>
           </tr>
-          {filteredBooks().map(a =>
-            <tr key={a.title}>
-              <td>{a.title}</td>
-              <td>{a.author.name}</td>
-              <td>{a.published}</td>
+          {books.map(book => (book.genres.includes(favoriteGenre)) && (
+            <tr key={book.id}>
+              <td>{book.title}</td>
+              <td>{book.author.name}</td>
+              <td>{book.published}</td>
             </tr>
-          )}
+          ))}
         </tbody>
       </table>
     </div>
