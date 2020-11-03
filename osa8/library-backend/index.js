@@ -64,8 +64,13 @@ type Mutation {
     username: String!
     password: String!
   ): Token
-}  
+}
+type Subscription {
+  bookAdded: Book!
+} 
 `
+const { PubSub } = require('apollo-server')
+const pubsub = new PubSub()
 
 const resolvers = {
   Query: {
@@ -85,21 +90,31 @@ const resolvers = {
   },
   Mutation: {
     addBook: async (root, args, context) => {
-      if (!context.currentUser)
-        throw new AuthenticationError('Invalid credentials')
-      try {
-        let author = await Author.findOne({ name: args.name })
-        if (!author) {
-          author = new Author({ name: args.author })
-          await author.save()
-        }
-        const book = new Book({ ...args, author })
-        return book.save()
-      } catch (error) {
-        throw new UserInputError(error.message, {
-          invalidArgs: args,
-        })
+      if (!context.currentUser) {
+          throw new AuthenticationError('Invalid credentials')
       }
+      let authorObject = await Author.findOne({ name: args.author })
+      if (!authorObject) {
+          authorObject = new Author({ name: args.author })
+          try {
+              await authorObject.save()
+          } catch (error) {
+              throw new UserInputError(error.message, {
+                  invalidArgs: args,
+              })
+          }
+      }
+      const bookObject = { ...args, author: authorObject }
+      const book = new Book(bookObject)
+      try {
+          await book.save()
+      } catch (error) {
+          throw new UserInputError(error.message, {
+              invalidArgs: args,
+          })
+      }
+      pubsub.publish('BOOK_ADDED', { bookAdded: book })
+      return book
     },
     editAuthor: async (root, args, context) => {
       if (!context.currentUser)
@@ -141,7 +156,12 @@ const resolvers = {
       }
     },
 
-  }
+  },
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator(['BOOK_ADDED'])
+    },
+  },
 }
 
 const server = new ApolloServer({
@@ -159,6 +179,7 @@ const server = new ApolloServer({
     }
   }
 })
-server.listen().then(({ url }) => {
+server.listen().then(({ url, subscriptionsUrl }) => {
   console.log(`Server ready at ${url}`)
+  console.log(`Subscriptions ready at ${subscriptionsUrl}`)
 })
