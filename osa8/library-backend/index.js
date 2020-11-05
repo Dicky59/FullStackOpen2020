@@ -5,6 +5,8 @@ const Book = require('./models/book')
 const Author = require('./models/author')
 const User = require('./models/user')
 const jwt = require('jsonwebtoken')
+//https://levelup.gitconnected.com/solve-n-1-query-problem-in-graphql-with-dataloaders-18e16ac17b21
+const DataLoader = require('dataloader')
 
 const JWT_SECRET = 'Freda14A9'
 
@@ -67,10 +69,20 @@ type Mutation {
 }
 type Subscription {
   bookAdded: Book!
+  authorAdded: Author!
 } 
 `
 const { PubSub } = require('apollo-server')
 const pubsub = new PubSub()
+
+const bookCounter = async (keys, Book) => {
+  const books = await Book.find({
+    author: {
+      $in: keys
+    }
+  })
+  return keys.map(key => books.filter(book => String(book.author) === String(key)).length)
+}
 
 const resolvers = {
   Query: {
@@ -83,7 +95,9 @@ const resolvers = {
     allAuthors: () => Author.find({}),
   },
   Author: {
-    bookCount: (root) => Book.find({ author: root.id }).countDocuments()
+    bookCount: async (root, args, { loaders }) => {
+      return await loaders.countBooks.load(root._id)
+    }
   },
   Book: {
     author: (root) => Author.findOne({ _id: root.author })
@@ -104,6 +118,7 @@ const resolvers = {
               })
           }
       }
+      pubsub.publish('AUTHOR_ADDED', { authorAdded: authorObject })
       const bookObject = { ...args, author: authorObject }
       const book = new Book(bookObject)
       try {
@@ -161,6 +176,9 @@ const resolvers = {
     bookAdded: {
       subscribe: () => pubsub.asyncIterator(['BOOK_ADDED'])
     },
+    authorAdded: {
+      subscribe: () => pubsub.asyncIterator(['AUTHOR_ADDED'])
+    },
   },
 }
 
@@ -175,7 +193,12 @@ const server = new ApolloServer({
       )
       const currentUser = await User
         .findById(decodedToken.id)
-      return { currentUser }
+        return {
+          currentUser,
+          loaders: {
+            countBooks: new DataLoader(keys => bookCounter(keys, Book))
+          }
+        }
     }
   }
 })
