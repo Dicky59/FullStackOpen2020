@@ -1,0 +1,32 @@
+interface Result {
+  trainingDays: number,
+  periodLength: number,
+  target: number,
+  average: number,
+  success: boolean,
+  rating: number,
+  ratingDescription: string,
+}
+
+const calculateExercises = (hours: Array<number>, target: number): Result => {
+  const periodLength = hours.length;
+  const average = hours.reduce((a, b) => a + b) / periodLength;
+  let rating;
+  let ratingsDescription;
+  
+  if (average >= target) {rating = 3; ratingsDescription = 'excellent';}
+  else if (average/target >= 0.7) {rating = 2; ratingsDescription = 'not too bad but could be better';}
+  else if (average/target < 0.7) {rating = 1; ratingsDescription = 'lazy monkey'}
+
+
+  return {
+    trainingDays: hours.filter((hour) => hour !== 0).length,
+    periodLength: periodLength,
+    target: target,
+    average: average,
+    success: average >= target,
+    rating: rating,
+    ratingDescription: ratingsDescription,
+  }
+}
+console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2))
