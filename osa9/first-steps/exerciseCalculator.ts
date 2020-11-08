@@ -8,6 +8,24 @@ interface Result {
   ratingDescription: string,
 }
 
+interface InputArgs {
+  exercises: Array<number>,
+  target: number
+}
+
+const parseArgs = (args: Array<string>):InputArgs => {
+  if (args.length < 4) throw new Error('Not enough arguments');
+  const target = Number(args[2]);
+  const exercises = args.slice(3).map(value => Number(value));
+  if (exercises.find(value => isNaN(value)) !== undefined) {
+    throw new Error('Provided values were not numbers!');
+  }
+  return {
+    exercises,
+    target
+  };
+};
+
 const calculateExercises = (hours: Array<number>, target: number): Result => {
   const periodLength = hours.length;
   const average = hours.reduce((a, b) => a + b) / periodLength;
@@ -29,4 +47,9 @@ const calculateExercises = (hours: Array<number>, target: number): Result => {
     ratingDescription: ratingsDescription,
   }
 }
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2))
+try {
+  const { exercises, target } = parseArgs(process.argv);
+  console.log(calculateExercises(exercises, target))
+} catch (e) {
+  console.log('Error, something happened, message: ', e.message);
+}

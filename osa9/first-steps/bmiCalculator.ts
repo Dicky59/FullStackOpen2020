@@ -1,6 +1,6 @@
 interface BmiArgs {
-  value1: number;
-  value2: number;
+  height: number;
+  weight: number;
 }
 
 const parseArguments = (args: Array<string>): BmiArgs => {
@@ -9,8 +9,8 @@ const parseArguments = (args: Array<string>): BmiArgs => {
 
   if (!isNaN(Number(args[2])) && !isNaN(Number(args[3]))) {
     return {
-      value1: Number(args[2]),
-      value2: Number(args[3])
+      height: Number(args[2]),
+      weight: Number(args[3])
     }
   } else {
     throw new Error('Provided values were not numbers!');
@@ -20,17 +20,15 @@ const parseArguments = (args: Array<string>): BmiArgs => {
 const calculateBmi = (height: number, weight: number): string => {
   const bmi = weight / (height / 100) ** 2;
 
-  if (bmi < 18) return 'Low';
+  if (bmi < 18) return 'Low (underweight)';
   else if (bmi <= 25) return 'Normal (healthy weight)';
-  else if (bmi <= 30) return 'High';
+  else if (bmi <= 30) return 'High (overweight)';
   else return 'Very high';
 }
 
 try {
-  const { value1, value2 } = parseArguments(process.argv);
-  calculateBmi(value1, value2);
+  const { height, weight } = parseArguments(process.argv);
+  console.log(calculateBmi(height, weight));
 } catch (e) {
   console.log('Error, something bad happened, message: ', e.message);
 }
-
-console.log(calculateBmi(180, 74));
