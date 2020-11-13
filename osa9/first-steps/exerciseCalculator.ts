@@ -29,12 +29,12 @@ const parseArgs = (args: Array<string>):InputArgs => {
 const calculateExercises = (hours: Array<number>, target: number): Result => {
   const periodLength = hours.length;
   const average = hours.reduce((a, b) => a + b) / periodLength;
-  let rating;
-  let ratingsDescription;
+  let rating = 0;
+  let ratingsDescription = '';
   
   if (average >= target) {rating = 3; ratingsDescription = 'excellent';}
   else if (average/target >= 0.7) {rating = 2; ratingsDescription = 'not too bad but could be better';}
-  else if (average/target < 0.7) {rating = 1; ratingsDescription = 'lazy monkey'}
+  else if (average/target < 0.7) {rating = 1; ratingsDescription = 'lazy monkey';}
 
 
   return {
@@ -49,7 +49,7 @@ const calculateExercises = (hours: Array<number>, target: number): Result => {
 }
 try {
   const { exercises, target } = parseArgs(process.argv);
-  console.log(calculateExercises(exercises, target))
+  console.log(calculateExercises(exercises, target));
 } catch (e) {
   console.log('Error, something happened, message: ', e.message);
 }
