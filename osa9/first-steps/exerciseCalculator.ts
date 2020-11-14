@@ -26,7 +26,7 @@ const parseArgs = (args: Array<string>):InputArgs => {
   };
 };
 
-const calculateExercises = (hours: Array<number>, target: number): Result => {
+export const calculateExercises = (hours: Array<number>, target: number): Result => {
   const periodLength = hours.length;
   const average = hours.reduce((a, b) => a + b) / periodLength;
   let rating = 0;
@@ -45,11 +45,12 @@ const calculateExercises = (hours: Array<number>, target: number): Result => {
     success: average >= target,
     rating: rating,
     ratingDescription: ratingsDescription,
-  }
-}
+  };
+};
 try {
   const { exercises, target } = parseArgs(process.argv);
   console.log(calculateExercises(exercises, target));
 } catch (e) {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   console.log('Error, something happened, message: ', e.message);
 }
