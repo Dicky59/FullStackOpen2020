@@ -1,7 +1,7 @@
-import diagnosisData from '../../data/diagnoses.json';
+import diagnosisData from '../../data/diagnoses';
 import { Diagnosis } from '../types';
 
-const diagnoses: Array<Diagnosis> = diagnosisData as Array<Diagnosis>;
+const diagnoses: Array<Diagnosis> = diagnosisData;
 
 const getAll = ():Array<Diagnosis> => {
   return diagnoses;
@@ -9,4 +9,4 @@ const getAll = ():Array<Diagnosis> => {
 
 export default {
   getAll
-}; 
+};
