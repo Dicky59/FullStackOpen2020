@@ -2,30 +2,34 @@ import React, { useEffect } from 'react';
 import axios from 'axios';
 import { Container, Icon } from 'semantic-ui-react';
 import { useParams } from 'react-router-dom';
-import { useStateValue } from '../state';
+import { useStateValue, updatePatient } from '../state';
 import { apiBaseUrl } from '../constants';
 import { Patient, Gender } from '../types';
 
 const PatientPage: React.FC = () => {
+  const [{ patients }, dispatch] = useStateValue();
   const { id } = useParams<{ id: string }>();
-  const [state, dispatch] = useStateValue();
-  let patient = state.patients[id];
+  let patient = patients[id];
 
-  const updatePatient = async () => {
-    const { data } = await axios.get<Patient>(`${apiBaseUrl}/patients/${id}`);
-    dispatch({ type: 'UPDATE_PATIENT', payload: data });
-    patient = { ...data };
-  };
   useEffect(() => {
     if (patient && !patient.ssn) {
-      updatePatient();
+      const fetchPatient = async () => {
+        try {
+          const { data: patientFromApi } = await axios.get<Patient>(
+            `${apiBaseUrl}/api/patients/${patient.id}`
+          );
+          dispatch(updatePatient(patientFromApi));
+        } catch (e) {
+          console.error(e);
+        }
+      };
+      fetchPatient();
     }
-  });
+  }, [id, patient, dispatch]);
 
   if (!patient) {
-    return null;
+    return <div>No patient found</div>;
   }
-
   const genderIcon =
     patient.gender === Gender.Female
       ? "venus"
