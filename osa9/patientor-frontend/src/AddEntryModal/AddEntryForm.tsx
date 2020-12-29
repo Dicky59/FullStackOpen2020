@@ -28,14 +28,15 @@ const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
       onSubmit={onSubmit}
       validate={values => {
         const requiredError = 'Field is required';
+        const dateFormatError = 'Invalid date format';
         const errors: { [field: string]: string } = {};
-        if (!values.date) {
-          errors.date = requiredError;
+        if (!values.date || !/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/i.test(values.date)) {
+          errors.date = dateFormatError;
         }
-        if (!values.specialist) {
+        if ((!values.specialist || values.specialist.length < 5)) {
           errors.specialist = requiredError;
         }
-        if (!values.description) {
+        if (!values.description || values.description.length < 5) {
           errors.description = requiredError;
         }
         return errors;
